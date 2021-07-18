@@ -50,7 +50,7 @@ public extension String {
             let from = index(startIndex, offsetBy: range.lowerBound, limitedBy: endIndex),
             let to = index(startIndex, offsetBy: range.upperBound, limitedBy: endIndex)
         else {
-            Log.error(destination: .framework, message: "Getting String.Index out of \(range) failed")
+            print("PackageFramework Error: Getting String.Index out of \(range) failed")
             return nil
         }
         return from ..< to

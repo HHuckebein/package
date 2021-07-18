@@ -302,17 +302,17 @@ final class UpdateTests: XCTestCase {
 private extension UpdateTests {
     func testInput(for filename: String, verbose: Bool, debug: Bool) -> (file: File, structure: SyntaxStructure)? {
         guard let path = UpdateTests.resourcePathForFile(filename), let packageURL = URL(string: path) else {
-            Log.error(destination: .framework, message: "Couldn't get content of \(filename)")
+            print("PackageFramework Error: Couldn't get content of \(filename)")
             return nil
         }
 
         guard let file = Utility.file(from: packageURL) else {
-            Log.error(destination: .framework, message: "Couldn't get file for \(packageURL.absoluteString)")
+            print("PackageFramework Error: Couldn't get file for \(packageURL.absoluteString)")
             return nil
         }
 
         guard let structure = Utility.syntaxStructure(from: file) else {
-            Log.error(destination: .framework, message: "Couldn't get structure for \(packageURL.absoluteString)")
+            print("PackageFramework Error: Couldn't get structure for \(packageURL.absoluteString)")
             return nil
         }
 

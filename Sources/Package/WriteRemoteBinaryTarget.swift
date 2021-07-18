@@ -33,7 +33,7 @@ extension Package {
             // create or update binaryTarget (.remote)
             let target: BinaryTarget = .remote(name: name, url: url, checkSum: checkSum)
             guard let content = target.content(from: file, structure: structure, verbose: options.verbose), content.isEmpty == false else {
-                Log.error(destination: .package, message: "Create/Update binaryTarget operation failed")
+                print("Package Error: Create/Update binaryTarget operation failed")
                 return
             }
 

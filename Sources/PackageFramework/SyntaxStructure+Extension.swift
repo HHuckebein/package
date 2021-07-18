@@ -83,8 +83,7 @@ extension SyntaxStructure {
 
         guard let pathElement = substructure?[Constants.BinaryTarget.Local.pathIdx],
               let pathReplacement = pathElement.string(in: file, offset: pathElement.bodyoffset, length: pathElement.bodylength) else {
-            if verbose { Log.error(destination: .package,
-                                   message: "Write BinaryTarget(update): couldn't find path element at index \(Constants.BinaryTarget.Local.pathIdx)") }
+            if verbose { print("PackageFramework Error: Write BinaryTarget(update): couldn't find path element at index \(Constants.BinaryTarget.Local.pathIdx)") }
             return nil
         }
 
@@ -95,8 +94,7 @@ extension SyntaxStructure {
 
     public func appendTarget(name: String, path: String, in file: File, verbose: Bool) -> String? {
         guard let insertIdx = targetsStructure(from: file)?.substructure?.first?.elements?.last?.insertionIndex(in: file) else {
-            if verbose { Log.error(destination: .package,
-                                   message: "Write BinaryTarget(append): couldn't find insertion index") }
+            if verbose { print("PackageFramework Error: Write BinaryTarget(append): couldn't find insertion index") }
             return nil
         }
         let string = String(format: Constants.BinaryTarget.Local.binaryTargetFormat, name, path)

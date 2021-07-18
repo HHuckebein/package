@@ -6,7 +6,7 @@ extension Package {
     struct Version: ParsableCommand {
         static var configuration = CommandConfiguration(abstract: "Display version.")
         func run() throws {
-            Log.info(destination: .package, message: PackageFramework.Version.current.displayString)
+            print("Version \(PackageFramework.Version.current.displayString)")
         }
     }
 }

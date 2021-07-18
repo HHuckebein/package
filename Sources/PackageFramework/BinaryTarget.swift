@@ -8,10 +8,10 @@ public enum BinaryTarget {
 
     public func content(from file: File, structure: SyntaxStructure, verbose: Bool) -> String? {
         if let targetInfo = structure.targetInformation(for: .binaryTarget, name: name, file: file) {
-            if verbose { Log.error(destination: .package, message: "Write BinaryTarget: update") }
+            if verbose { print("Package Error: Write BinaryTarget: update") }
             return update(from: file, targetInfo: targetInfo, verbose: verbose)
         } else {
-            if verbose { Log.error(destination: .package, message: "Write BinaryTarget: append") }
+            if verbose { print("Package Error: Write BinaryTarget: append") }
             return append(from: file, structure: structure, verbose: verbose)
         }
     }
