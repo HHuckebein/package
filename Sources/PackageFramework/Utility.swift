@@ -19,7 +19,7 @@ public enum Utility {
            try FileManager.default.createDirectory(at: targetDirURL, withIntermediateDirectories: true, attributes: nil)
             return true
         } catch {
-            Log.error(destination: .framework, message: "output-directory creation failed with \(error.localizedDescription)")
+            print("PackageFramework Error: output-directory creation failed with \(error.localizedDescription)")
             return false
         }
     }
@@ -30,7 +30,7 @@ public enum Utility {
     public static func file(from packageURL: URL) -> File? {
         let url = URL(fileURLWithPath: packageURL.absoluteString)
         guard let string = try? String(contentsOf: url, encoding: .utf8) else {
-            Log.error(destination: .framework, message: "Package.swift file missing at \(packageURL.path)")
+            print("PackageFramework Error: Package.swift file missing at \(packageURL.path)")
             return nil
         }
         return File(contents: string)
@@ -45,11 +45,11 @@ public enum Utility {
             if let jsonData = structure.description.data(using: .utf8) {
                 return try JSONDecoder().decode(SyntaxStructure.self, from: jsonData)
             } else {
-                Log.error(destination: .framework, message: "Converting Structure.description into data(using:) failed")
+                print("PackageFramework Error: Converting Structure.description into data(using:) failed")
                 return nil
             }
         } catch {
-            Log.error(destination: .framework, message: "Decoding SyntaxStructure failed with \(error.localizedDescription)")
+            print("PackageFramework Error: Decoding SyntaxStructure failed with \(error.localizedDescription)")
             return nil
         }
     }
@@ -71,12 +71,12 @@ public enum Utility {
     /// - Returns: Wether path passed conformance checks.
     public static func checkRemoteURL(_ url: URL) -> Bool {
         guard let scheme = url.scheme, scheme == "https" || scheme == "http" else {
-            Log.error(destination: .framework, message: "URL failure: scheme: \(url.scheme ?? "--") is not allowed here. Use http or https.")
+            print("PackageFramework Error: URL failure: scheme: \(url.scheme ?? "--") is not allowed here. Use http or https.")
             return false
         }
 
         guard url.pathExtension == Constants.expectedRemotePathExtension else {
-            Log.error(destination: .framework, message: "URL failure: Expected \(Constants.expectedRemotePathExtension) extension but found \(url.pathExtension).")
+            print("PackageFramework Error: URL failure: Expected \(Constants.expectedRemotePathExtension) extension but found \(url.pathExtension).")
             return false
         }
         return true
@@ -87,16 +87,16 @@ public enum Utility {
     /// - Returns: Wether path passed conformance checks.
     public static func checkLocalPath(_ path: String) -> Bool {
         guard let url = URL(string: path) else {
-            Log.error(destination: .framework, message: "couldn't create url from \(path)")
+            print("PackageFramework Error: couldn't create url from \(path)")
             return false
         }
 
         guard url.scheme == nil else {
-            Log.error(destination: .framework, message: "\(url.scheme ?? "--") is not allowed here.")
+            print("PackageFramework Error: \(url.scheme ?? "--") is not allowed here.")
             return false
         }
         guard url.pathExtension == Constants.expectedLocalPathExtension else {
-            Log.error(destination: .framework, message: "Expected \(Constants.expectedLocalPathExtension) but found \(url.pathExtension).")
+            print("PackageFramework Error: Expected \(Constants.expectedLocalPathExtension) but found \(url.pathExtension).")
             return false
         }
         return true
@@ -118,9 +118,9 @@ public enum Utility {
 
             do {
                 try content.write(to: targetURL, atomically: true, encoding: .utf8)
-                if verbose { Log.info(destination: .framework, message: "Writing content to \(targetURL.absoluteString) succeeded.") }
+                if verbose { print("PackageFramework Info: Writing content to \(targetURL.absoluteString) succeeded.") }
             } catch {
-                Log.error(destination: .framework, message: "Writing content to \(targetURL.absoluteString) failed with \(error.localizedDescription)")
+                print("PackageFramework Error: Writing content to \(targetURL.absoluteString) failed with \(error.localizedDescription)")
             }
         }
     }
@@ -133,11 +133,11 @@ public enum Utility {
     public static func supportsBinaryTarget(file: File, verbose: Bool) -> Bool {
         guard let version = file.swiftToolsVersion else { return false }
 
-        if verbose { Log.info(destination: .framework, message: "swift-tools-version: \(version)") }
+        if verbose { print("PackageFramework Info: swift-tools-version: \(version)") }
 
         switch version.versionCompare(Constants.minVersion) {
             case .orderedAscending:
-                Log.error(destination: .framework, message: "swift-tools-version must be greater 5.2 (current:  \(version))")
+                print("PackageFramework Error: swift-tools-version must be greater 5.2 (current:  \(version))")
                 return false
             case .orderedSame, .orderedDescending:
                 return true
